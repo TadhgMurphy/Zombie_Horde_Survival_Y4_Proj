@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Zombie_Horde_Survival_Y4_Proj/Zombie_Horde_Survival_Y4_Proj.vcxproj" />
+</Solution>
