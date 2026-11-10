@@ -26,6 +26,7 @@ private:
 	void SpawnZombie();
 	void SeparateZombies();
 	void HandleCollisions();
+	void DrawHUD() const;
 	void Restart();
 
 	static constexpr int window_w = 1280;

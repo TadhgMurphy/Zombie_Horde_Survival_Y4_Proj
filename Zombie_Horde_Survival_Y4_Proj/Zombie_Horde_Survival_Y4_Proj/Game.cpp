@@ -99,6 +99,7 @@ void Game::Render()
 	m_player.Draw();
 	EndMode2D();
 
+	DrawHUD();
 	DrawFPS(10, 10);
 	EndDrawing();
 }
@@ -177,6 +178,26 @@ void Game::HandleCollisions()
 	{
 		if (CheckCollisionCircles(m_player.GetPosition(), m_player.GetRadius(), z.GetPosition(), z.GetRadius()))
 			m_player.TakeDamage(z.GetDamage());
+	}
+}
+
+void Game::DrawHUD() const
+{
+	const int x = 10, y = 40, w = 250, h = 25;
+	float pct = m_player.GetHealth() / m_player.GetMaxHealth();
+
+	DrawRectangle(x, y, w, h, Color{ 60, 0, 0, 255 });
+	DrawRectangle(x, y, (int)(w * pct), h, RED);
+	DrawRectangleLines(x, y, w, h, WHITE);
+	DrawText(TextFormat("%d / %d", (int)m_player.GetHealth(), (int)m_player.GetMaxHealth()), x + 8, y + 3, 18, WHITE);
+
+	if (m_state == GameState::GameOver)
+	{
+		DrawRectangle(0, 0, window_w, window_h, Color{ 0, 0, 0, 160 });
+		const char* title = "GAME OVER";
+		const char* hint = "Press R to restart";
+		DrawText(title, (window_w - MeasureText(title, 60)) / 2, window_h / 2 - 50, 60, RED);
+		DrawText(hint, (window_w - MeasureText(hint, 24)) / 2, window_h / 2 + 20, 24, WHITE);
 	}
 }
 
