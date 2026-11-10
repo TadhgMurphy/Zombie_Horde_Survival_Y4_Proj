@@ -22,6 +22,8 @@ private:
 	void Render();
 	void UpdateCamera();
 
+	void HandleCollisions();
+
 	static constexpr int window_w = 1280;
 	static constexpr int window_h = 720;
 

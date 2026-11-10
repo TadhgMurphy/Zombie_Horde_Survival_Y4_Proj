@@ -47,6 +47,8 @@ void Game::Update(float dt)
 		for (Zombie& z : m_zombies)
 			z.Update(dt, m_player.GetPosition());
 
+		HandleCollisions();
+
 		m_camera.target = m_player.GetPosition();
 		break;
 	}
@@ -81,4 +83,28 @@ void Game::UpdateCamera()
 	p.x = Clamp(p.x, b.x + halfW, b.x + b.width - halfW);
 	p.y = Clamp(p.y, b.y + halfH, b.y + b.height - halfH);
 	m_camera.target = p;
+}
+
+void Game::HandleCollisions()
+{
+	for (Bullet& bullet : m_player.GetWeapon().GetBullets())
+	{
+		for (Zombie& z : m_zombies)
+		{
+			if (!z.IsAlive())
+				continue;
+			if (CheckCollisionCircles(bullet.pos, bullet.radius, z.GetPosition(), z.GetRadius()))
+			{
+				z.TakeDamage(bullet.damage);
+				bullet.life = 0.0f;
+				break;
+			}
+		}
+	}
+
+	for (const Zombie& z : m_zombies)
+	{
+		if (CheckCollisionCircles(m_player.GetPosition(), m_player.GetRadius(), z.GetPosition(), z.GetRadius()))
+			m_player.TakeDamage(z.GetDamage());
+	}
 }

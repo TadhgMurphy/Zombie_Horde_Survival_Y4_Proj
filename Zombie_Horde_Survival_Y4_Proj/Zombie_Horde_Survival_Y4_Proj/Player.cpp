@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <cmath>
+#include <algorithm>
 #include "raymath.h"
 
 
@@ -9,6 +10,8 @@ Player::Player()
 
 void Player::Update(float dt, Rectangle levelBounds, Vector2 mouseWorldPos)
 {
+	m_invulnTimer = std::max(0.0f, m_invulnTimer - dt);
+
 	Vector2 dir{ 0.0f, 0.0f };
 	if (IsKeyDown(KEY_W) || IsKeyDown(KEY_UP))
 		dir.y -= 1.0f;
@@ -41,5 +44,17 @@ void Player::Draw() const
 {
 	m_weapon.Draw();
 	DrawRectanglePro({ m_pos.x, m_pos.y, 30.0f, 8.0f }, { 0.0f, 4.0f }, m_aimAngle, LIGHTGRAY);
-	DrawCircleV(m_pos, m_radius, Color{ 70,130,200,255 });
+	//DrawCircleV(m_pos, m_radius, Color{ 70,130,200,255 });
+	Color body = Color{ 70,130,200,255 };
+	if (m_invulnTimer > 0.0f && ((int)(m_invulnTimer * 20.0f) % 2 == 0))
+		body = WHITE;
+	DrawCircleV(m_pos, m_radius, body);
 }
+
+void Player::TakeDamage(float amount)
+{
+	if (m_invulnTimer > 0.0f || IsDead())
+		return;
+
+	m_health = std::max(0.0f, m_health - amount);
+	m_invulnTimer = invulnDuration;}

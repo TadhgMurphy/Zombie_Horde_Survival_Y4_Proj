@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Zombie_Horde_Survival_Y4_Proj/Zombie_Horde_Survival_Y4_Proj.vcxproj" />
+  <Project Path="Zombie_Horde_Survival_Y4_Proj/Zombie_Horde_Survival_Y4_Proj.vcxproj" Id="c2a41f0d-7cf8-4beb-9823-277aec3e0ca5" />
 </Solution>
