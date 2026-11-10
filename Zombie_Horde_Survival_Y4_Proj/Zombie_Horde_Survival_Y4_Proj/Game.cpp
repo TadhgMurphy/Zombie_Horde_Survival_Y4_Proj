@@ -6,9 +6,11 @@ Game::Game()
 	InitWindow(window_w, window_h, "Zombie Horde Survival");
 	SetTargetFPS(60);
 
+	m_camera.target = m_player.GetPosition();
+
 	m_camera.offset = { window_w / 2.0f, window_h / 2.0f };
 	m_camera.rotation = 0.0f;
-	m_camera.zoom = 1.0f;
+	m_camera.zoom = 0.45f;
 	UpdateCamera();
 
 	/*m_zombies.emplace_back(Vector2{ 100.0f, 100.0f });
@@ -61,7 +63,7 @@ void Game::Update(float dt)
 		);
 
 		m_spawnTimer -= dt;
-		if (m_spawnTimer <= 0.0f && m_zombies.size() < 30)
+		if (m_spawnTimer <= 0.0f && m_zombies.size() < 10)
 		{
 			SpawnZombie();
 			m_spawnTimer = 1.5f;
@@ -94,7 +96,10 @@ void Game::Render()
 
 	
 	for (const Zombie& z : m_zombies)
+	{
 		z.Draw();
+		std::cout << "Enemy Spawned\n";
+	}
 
 	m_player.Draw();
 	EndMode2D();
@@ -106,15 +111,30 @@ void Game::Render()
 
 void Game::UpdateCamera()
 {
-	Rectangle b = m_level.GetBounds();
-	Vector2 p = m_player.GetPosition();
+	Rectangle bounds = m_level.GetBounds();
 
-	float halfW = window_w / 2.0f / m_camera.zoom;
-	float halfH = window_h / 2.0f / m_camera.zoom;
+	Vector2 playerPos = m_player.GetPosition();
 
-	p.x = Clamp(p.x, b.x + halfW, b.x + b.width - halfW);
-	p.y = Clamp(p.y, b.y + halfH, b.y + b.height - halfH);
-	m_camera.target = p;
+	float halfW = window_w / (2.0f * m_camera.zoom);
+	float halfH = window_h / (2.0f * m_camera.zoom);
+
+	float minX = bounds.x + halfW;
+	float maxX = bounds.x + bounds.width - halfW;
+
+	float minY = bounds.y + halfH;
+	float maxY = bounds.y + bounds.height - halfH;
+
+	if (minX > maxX)
+		playerPos.x = bounds.x + bounds.width / 2.0f;
+	else
+		playerPos.x = Clamp(playerPos.x, minX, maxX);
+
+	if (minY > maxY)
+		playerPos.y = bounds.y + bounds.height / 2.0f;
+	else
+		playerPos.y = Clamp(playerPos.y, minY, maxY);
+
+	m_camera.target = playerPos;
 }
 
 void Game::SpawnZombie()
