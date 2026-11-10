@@ -8,7 +8,8 @@
 
 enum class GameState
 {
-	Playing
+	Playing,
+	GameOver
 };
 
 class Game
@@ -22,7 +23,10 @@ private:
 	void Render();
 	void UpdateCamera();
 
+	void SpawnZombie();
+	void SeparateZombies();
 	void HandleCollisions();
+	void Restart();
 
 	static constexpr int window_w = 1280;
 	static constexpr int window_h = 720;
@@ -33,4 +37,6 @@ private:
 	Level m_level;
 	Player m_player;
 	std::vector<Zombie> m_zombies;
+
+	float m_spawnTimer = 0.0f;
 };

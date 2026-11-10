@@ -28,4 +28,6 @@ private:
 	Vector2 m_pos;
 	ZombieStats m_stats;
 	float m_health;
+
+	float m_spawnTimer = 0.0f;
 };
